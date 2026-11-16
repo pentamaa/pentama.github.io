@@ -34,10 +34,19 @@
   footer a{color:var(--fg);text-decoration:none}
   @media(max-width:1000px){.g{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:640px){.g{grid-template-columns:1fr}.v span{opacity:1}.v img{opacity:.5}}
+  .cli{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;padding:34px 28px 6px}
+  .cli button{background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--fg);font:600 10px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;transition:filter .25s,opacity .25s}
+  .cli img,.cli i{width:58px;height:58px;border-radius:50%;object-fit:cover;display:block;background:#222;border:2px solid transparent;font-style:normal;line-height:54px;font-size:20px}
+  .cli.on button{filter:grayscale(1);opacity:.4}
+  .cli.on button[aria-pressed=true]{filter:none;opacity:1}
+  .cli.on button[aria-pressed=true] img{border-color:#fff}
+  .cli button:hover{filter:none;opacity:1}
+  .cli button:focus-visible{outline:1px solid #fff;outline-offset:4px}
 </style></head><body>
 <nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener">Contact</a></span></nav>
 <section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Mateo</h1><p>Monteur vidéo · <b id="stats"></b></p></div></section>
-<div class="bar"><div id="tabs"></div><div id="tri"></div></div>
+<div class="cli" id="cli" aria-label="Filtrer par client"></div>
+<div class="bar"><div id="tabs"></div></div>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
 <section class="about" id="a-propos"><h2>À propos</h2><div>
@@ -67,6 +76,7 @@
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
 stats.textContent=V.length+" vidéos · "+F.vues(F.total(V))+" de vues · "+F.clients().length+" clients";
+const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React","Aftermovie / Cadrage","Cadrage","Autres"];
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
@@ -76,13 +86,13 @@ function draw(){
   // Fort Boyard (Domingo) toujours en premier dans « Tout ».
   if(!f&&!cl){const i=L.findIndex(v=>v.id===PREMIERE);if(i>0)L.unshift(L.splice(i,1)[0]);}
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>!c||v.type===c).length}</button>`).join("");
-  document.getElementById("tri").innerHTML=`<select id="cl" aria-label="Filtrer par client"><option value="">Tous les clients</option>${noms.map(c=>`<option${c===cl?" selected":""}>${F.esc(c)}</option>`).join("")}</select>`;
+  cli.className="cli"+(cl?" on":"");
+  cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}${F.esc(c)}</button>`).join("");
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
 tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b){f=b.dataset.c;n=PAS;draw();}});
-document.getElementById("tri").addEventListener("click",e=>{const b=e.target.closest("button");if(b){tri=b.dataset.t;n=PAS;draw();}});
-document.getElementById("tri").addEventListener("change",e=>{if(e.target.id==="cl"){cl=e.target.value;n=PAS;draw();}});
+cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;draw();}});
 more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
 </script></body></html>
