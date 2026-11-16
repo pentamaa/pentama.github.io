@@ -78,16 +78,24 @@ reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&control
 stats.textContent=V.length+" vidéos · "+F.vues(F.total(V))+" de vues · "+F.clients().length+" clients";
 const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
-const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React","Aftermovie / Cadrage","Cadrage","Autres"];
+const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
+// Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
+const AUTRES=["Noa"], HORS_VITRINE=["Red Vision","Noa"], AC="Autres clients";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
-const noms=F.clients().sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
+const noms=F.clients().filter(c=>!AUTRES.includes(c)).sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
 function draw(){
-  const L=V.filter(v=>(!f||v.type===f)&&(!cl||v.client===cl)).sort((a,b)=>b.date.localeCompare(a.date));
+  const L=V.filter(v=>(!f||v.type===f)&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).sort((a,b)=>b.date.localeCompare(a.date));
   // Fort Boyard (Domingo) toujours en premier dans « Tout ».
-  if(!f&&!cl){const i=L.findIndex(v=>v.id===PREMIERE);if(i>0)L.unshift(L.splice(i,1)[0]);}
+  if(!f&&!cl){
+    // Vitrine : Fort Boyard, puis la vidéo la plus vue de chaque client, puis le reste par date.
+    const p=L.find(v=>v.id===PREMIERE), best={};
+    for(const v of L) if(v!==p&&v.client!==(p&&p.client)&&!HORS_VITRINE.includes(v.client)&&(!best[v.client]||v.vues>best[v.client].vues)) best[v.client]=v;
+    const tete=[p,...Object.values(best).sort((a,b)=>b.vues-a.vues)].filter(Boolean);
+    L.splice(0,L.length,...tete,...L.filter(v=>!tete.includes(v)));
+  }
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>!c||v.type===c).length}</button>`).join("");
   cli.className="cli"+(cl?" on":"");
-  cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}${F.esc(c)}</button>`).join("");
+  cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><i>+</i>${AC}</button>`;
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
