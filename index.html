@@ -46,12 +46,14 @@
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
 stats.textContent=V.length+" vidéos · "+F.vues(F.total(V))+" de vues · "+F.clients().length+" clients";
-const PAS=24; let f="",cl="",tri="date",n=PAS;
+const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React","Aftermovie / Cadrage","Cadrage","Autres"];
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 const noms=F.clients().sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
 function draw(){
   const L=V.filter(v=>(!f||v.type===f)&&(!cl||v.client===cl)).sort((a,b)=>b.date.localeCompare(a.date));
+  // Fort Boyard (Domingo) toujours en premier dans « Tout ».
+  if(!f&&!cl){const i=L.findIndex(v=>v.id===PREMIERE);if(i>0)L.unshift(L.splice(i,1)[0]);}
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>!c||v.type===c).length}</button>`).join("");
   document.getElementById("tri").innerHTML=`<select id="cl" aria-label="Filtrer par client"><option value="">Tous les clients</option>${noms.map(c=>`<option${c===cl?" selected":""}>${F.esc(c)}</option>`).join("")}</select>`;
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
