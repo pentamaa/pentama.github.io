@@ -35,11 +35,23 @@
   @media(max-width:1000px){.g{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:640px){.g{grid-template-columns:1fr}.v span{opacity:1}.v img{opacity:.5}}
 </style></head><body>
-<nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener">Contact</a></span></nav>
+<nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener">Contact</a></span></nav>
 <section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Mateo</h1><p>Monteur vidéo · <b id="stats"></b></p></div></section>
 <div class="bar"><div id="tabs"></div><div id="tri"></div></div>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
+<section class="about" id="a-propos"><h2>À propos</h2><div>
+<p><b>Monteur vidéo freelance depuis 2022</b>, j'aide les créateurs de contenu et les marques à faire des vidéos qui retiennent l'attention.</p>
+<p>J'ai travaillé sur des formats très différents : des best-of gaming, des formats longs pour France TV et des projets pour des entreprises.</p>
+<p>Je suis chef monteur de l'agence suisse <b>Red Vision</b> depuis sa création. On y produit du contenu chaque jour pour des restaurants, des agences immobilières, des événements, des marques de bijoux et d'horlogerie, entre autres.</p>
+<p>Je monte sur la suite Adobe et DaVinci Resolve. Quand un projet le demande, j'utilise aussi des outils d'IA, sans perdre ce qui fait la créativité du montage.</p>
+</div></section>
+<style>
+  .about{max-width:760px;margin:80px auto 20px;padding:48px 28px 0;border-top:1px solid var(--line);scroll-margin-top:70px}
+  .about h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:24px}
+  .about p{font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:#d6d6d6;margin-bottom:18px}
+  .about b{color:#fff;font-weight:600}
+</style>
 <footer><div class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt="">@pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""><b>pentama</b></a></div><span>© 2026 Mateo</span></footer>
 <script>const dcn=dc.querySelector("b");dc.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama");dcn.textContent="Pseudo copié ✓";setTimeout(()=>dcn.textContent="pentama",1500);});</script>
 <style>
