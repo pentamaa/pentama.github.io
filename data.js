@@ -1,4 +1,4 @@
-// Vidéos du portfolio de Matéo (Pentama). Vues relevées sur YouTube le 10/11/2026.
+// Vidéos du portfolio de Matéo (Pentama).
 window.V = [{"id": "lEpo2ATObvw","titre": "J’ai affronté le MONDE ENTIER avec la PIRE ÉQUIPE de FC27 !","client": "Skinra","date": "2026-10-17","vues": 259069,"duree": 1123,"role": "Montage","credit": "Skinra - Pentama","type": "Gaming / Best Of"},
 {"id": "Xgn7pgmPPgw","titre": "Je deviens le ROI de THE GROUNDS sur FC27 !","client": "Skinra","date": "2026-10-03","vues": 316137,"duree": 1651,"role": "Montage","credit": "Skinra - Miouniou - Pentama","type": "Gaming / Best Of"},
 {"id": "5pA6365vQz0","titre": "J’ai essayé le Jeu qui veut REMPLACER FC27 ! (je suis encore choqué)","client": "Skinra","date": "2026-09-12","vues": 296446,"duree": 1334,"role": "Montage","credit": "Skinra - Pentama - Miouniou - Emil","type": "Gaming / Best Of"},
@@ -17,6 +17,7 @@ window.V = [{"id": "lEpo2ATObvw","titre": "J’ai affronté le MONDE ENTIER avec
 {"id": "FCQuPCShUNs","titre": "20 ANS pour BATTRE CHELSEA sur TOUS LES FIFA !","client": "Skinra","date": "2026-03-14","vues": 216803,"duree": 1115,"role": "Montage","credit": "Skinra - Pentama - Miouniou","type": ""},
 {"id": "VEZAxs_hHXY","titre": "J’ai testé DLS26, le \"MEILLEUR\" jeu de FOOT MOBILE… C’EST NUL??","client": "Skinra","date": "2026-02-07","vues": 428609,"duree": 996,"role": "Montage","credit": "Skinra - Pentama","type": ""},
 {"id": "8Y-62vYLwkU","titre": "Les 10 FAUTES les + DANGEREUSES de 2025 ! (j’ai jamais vu ça)","client": "Skinra","date": "2026-01-17","vues": 174763,"duree": 640,"role": "Montage","credit": "Skinra - Pentama","type": ""},
+{"id": "C-jdVFWXmMg","titre": "60 SECONDES pour être LE MEILLEUR (avec LaPanny, Sora, Antton et Raven)","client": "Valise & Caramel","date": "2025-12-21","vues": 177288,"duree": 2539,"role": "Montage","credit": "Montage vidéo : Matéo D. (Pentama)","type": "Concept / IRL"},
 {"id": "AqaumUvyPwQ","titre": "L'ANNIVERSAIRE PIÉGÉ d'MBAPPÉ sur FC26 ! (je l'empoisonne)","client": "Skinra","date": "2025-12-20","vues": 188370,"duree": 1161,"role": "Montage","credit": "Skinra - Pentama - Miouniou","type": ""},
 {"id": "2a9zKT_qOOk","titre": "J'ai DÉCOUVERT GOALS et depuis JE NE DORS PLUS.","client": "Skinra","date": "2025-12-13","vues": 261317,"duree": 1123,"role": "Montage","credit": "Skinra - Pentama","type": ""},
 {"id": "Qgx6fPQ9QXw","titre": "OG’S CONTRE KAMETOTV ! (BEST OF OG'S SAISON 2) #4","client": "Domingo","date": "2025-12-06","vues": 94448,"duree": 2700,"role": "Montage","credit": "Montage par : Pentama","type": ""},
