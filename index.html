@@ -40,9 +40,16 @@
 <div class="bar"><div id="tabs"></div><div id="tri"></div></div>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
-<footer><span>© 2026 Mateo</span><span class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener">Instagram @pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord">Discord pentama</a></span></footer>
-<script>dc.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama");dc.textContent="Pseudo copié ✓";setTimeout(()=>dc.textContent="Discord pentama",1500);});</script>
-<style>footer .res{display:flex;gap:24px;flex-wrap:wrap}</style>
+<footer><div class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt="">@pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""><b>pentama</b></a></div><span>© 2026 Mateo</span></footer>
+<script>const dcn=dc.querySelector("b");dc.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama");dcn.textContent="Pseudo copié ✓";setTimeout(()=>dcn.textContent="pentama",1500);});</script>
+<style>
+  footer{flex-direction:column;align-items:center;gap:18px;padding:40px 28px}
+  footer .res{display:flex;gap:40px;flex-wrap:wrap;justify-content:center}
+  footer .res a{display:flex;flex-direction:column;align-items:center;gap:10px;opacity:.8;transition:opacity .2s}
+  footer .res a:hover{opacity:1}
+  footer .res img{width:28px;height:28px}
+  footer .res b{font-weight:inherit}
+</style>
 <script src="data.js"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
