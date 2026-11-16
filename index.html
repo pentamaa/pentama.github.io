@@ -51,9 +51,9 @@ const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React","Aftermovi
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 const noms=F.clients().sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
 function draw(){
-  const L=V.filter(v=>(!f||v.type===f)&&(!cl||v.client===cl)).sort((a,b)=>tri==="vues"?b.vues-a.vues:b.date.localeCompare(a.date));
+  const L=V.filter(v=>(!f||v.type===f)&&(!cl||v.client===cl)).sort((a,b)=>b.date.localeCompare(a.date));
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>!c||v.type===c).length}</button>`).join("");
-  document.getElementById("tri").innerHTML=[["date","Récentes"],["vues","Les plus vues"]].map(t=>`<button data-t="${t[0]}" aria-pressed="${t[0]===tri}">${t[1]}</button>`).join("")+`<select id="cl" aria-label="Filtrer par client"><option value="">Tous les clients</option>${noms.map(c=>`<option${c===cl?" selected":""}>${F.esc(c)}</option>`).join("")}</select>`;
+  document.getElementById("tri").innerHTML=`<select id="cl" aria-label="Filtrer par client"><option value="">Tous les clients</option>${noms.map(c=>`<option${c===cl?" selected":""}>${F.esc(c)}</option>`).join("")}</select>`;
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
