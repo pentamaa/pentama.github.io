@@ -80,7 +80,7 @@ const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idr
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
 // Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
-const AUTRES=["Noa"], HORS_VITRINE=["Red Vision","Noa"], AC="Autres clients";
+const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Autres clients";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 const noms=F.clients().filter(c=>!AUTRES.includes(c)).sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
 function draw(){
