@@ -50,18 +50,63 @@
 <div class="bar"><div id="tabs"></div></div>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
-<section class="about" id="a-propos"><h2>À propos</h2><div>
-<p><b>Monteur vidéo freelance depuis 2022</b>, j'aide les créateurs de contenu et les marques à faire des vidéos qui retiennent l'attention.</p>
-<p>J'ai travaillé sur des formats très différents : des best-of gaming, des formats longs pour France TV et des projets pour des entreprises.</p>
-<p>Je suis chef monteur de l'agence suisse <b>Red Vision</b> depuis sa création. On y produit du contenu chaque jour pour des restaurants, des agences immobilières, des événements, des marques de bijoux et d'horlogerie, entre autres.</p>
-<p>Je monte sur la suite Adobe et DaVinci Resolve. Quand un projet le demande, j'utilise aussi des outils d'IA, sans perdre ce qui fait la créativité du montage.</p>
+<section class="about" id="a-propos"><div class="ab-card">
+<h2>À propos</h2><p class="ab-sub">Monteur et cadreur vidéo · Lyon</p>
+<p><b>Monteur vidéo freelance depuis 2022</b>, j'aide les <span class="hv" data-pop="createurs">créateurs de contenu</span> et les marques à faire des vidéos qui retiennent l'attention.</p>
+<p>J'ai travaillé sur des formats très différents : des <span class="hv" data-pop="gaming">best-of gaming</span>, des <span class="hv" data-pop="longs">formats longs</span> pour France TV et des projets pour des entreprises.</p>
+<p>Je suis chef monteur de l'agence suisse <span class="hv" data-pop="redvision">Red Vision</span> depuis sa création. On y produit du contenu chaque jour pour des restaurants, des agences immobilières, des événements, des marques de bijoux et d'horlogerie, entre autres.</p>
+<p>Je monte sur la <span class="hv" data-pop="outils">suite Adobe et DaVinci Resolve</span>. Quand un projet le demande, j'utilise aussi des outils d'IA, sans perdre ce qui fait la créativité du montage.</p>
+<div class="ab-pops" id="abpops" aria-hidden="true"></div>
 </div></section>
 <style>
-  .about{max-width:760px;margin:80px auto 20px;padding:48px 28px 0;border-top:1px solid var(--line);scroll-margin-top:70px}
-  .about h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:24px}
-  .about p{font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:#d6d6d6;margin-bottom:18px}
+  .about{max-width:860px;margin:80px auto 20px;padding:0 20px;scroll-margin-top:70px}
+  .ab-card{position:relative;background:#111;border:1px solid #1d1d1d;border-radius:18px;padding:clamp(28px,5vw,56px)}
+  .about h2{font-size:clamp(34px,5vw,54px);font-weight:700;letter-spacing:-.03em;line-height:1;color:#fff}
+  .ab-sub{font-size:11px!important;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)!important;margin:12px 0 28px!important}
+  .about p{font-size:clamp(16px,1.6vw,19px);line-height:1.7;color:#9a9a9a;margin-bottom:16px}
   .about b{color:#fff;font-weight:600}
+  .hv{color:#fff;border-bottom:1px dashed #555;cursor:default;transition:border-color .2s}
+  .hv:hover,.hv.on{border-color:#fff}
+  .ab-pops{position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .pop{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;opacity:0;transform:translate(-50%,-50%) scale(.6);transition:transform .45s cubic-bezier(.2,.9,.3,1.3),opacity .3s;white-space:nowrap}
+  .pop img{width:46px;height:46px;border-radius:50%;object-fit:cover;box-shadow:0 8px 24px #000a;border:2px solid #111}
+  .pop span{font:700 13px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#1c1c1c;border:1px solid #333;border-radius:999px;padding:7px 13px;box-shadow:0 8px 24px #000a}
+  .pop.show{opacity:1}
+  @media(prefers-reduced-motion:reduce){.pop{transition:opacity .2s}}
 </style>
+<script>
+(()=>{
+  const card=document.querySelector(".ab-card"), box=document.getElementById("abpops");
+  const img=c=>(window.AVMAP||{})[c]?{img:window.AVMAP[c],t:c}:{t:c};
+  const best=t=>[...new Set(V.filter(v=>v.type===t).sort((a,b)=>b.vues-a.vues).map(v=>v.client))].filter(c=>!["Noa"].includes(c)).slice(0,4);
+  const SETS={
+    createurs:()=>["Skinra","Domingo","Pearja","Idreau","Dooms","French Hardware"].map(img),
+    gaming:()=>best("Gaming / Best Of").map(img),
+    longs:()=>best("Concept / IRL").map(img),
+    redvision:()=>[{img:"avatars/red-vision.jpg",t:""},{t:"Restaurants"},{t:"Immobilier"},{t:"Événements"},{t:"Horlogerie"}],
+    outils:()=>[{t:"Premiere Pro"},{t:"After Effects"},{t:"DaVinci Resolve"}]
+  };
+  let cur=null, timers=[];
+  function clear(){timers.forEach(clearTimeout);timers=[];[...box.children].forEach(p=>{p.classList.remove("show");setTimeout(()=>p.remove(),300);});if(cur)cur.classList.remove("on");cur=null;}
+  function show(el){
+    if(cur===el)return; clear(); cur=el; el.classList.add("on");
+    const items=SETS[el.dataset.pop](), rc=card.getBoundingClientRect(), re=el.getBoundingClientRect();
+    const cx=re.left-rc.left+re.width/2, cy=re.top-rc.top+re.height/2, n=items.length;
+    items.forEach((it,i)=>{
+      const p=document.createElement("div"); p.className="pop";
+      p.innerHTML=(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
+      p.style.left=cx+"px"; p.style.top=cy+"px"; box.appendChild(p);
+      const ang=-Math.PI*(.15+.7*(n>1?i/(n-1):.5)), rad=70+(i%2)*28;
+      timers.push(setTimeout(()=>{p.classList.add("show");p.style.transform=`translate(calc(-50% + ${Math.cos(ang)*rad*1.6}px), calc(-50% + ${Math.sin(ang)*rad}px)) scale(1) rotate(${(i%2?1:-1)*(4+i*2)}deg)`;},20+i*45));
+    });
+  }
+  card.querySelectorAll(".hv").forEach(el=>{
+    el.addEventListener("mouseenter",()=>show(el));
+    el.addEventListener("mouseleave",clear);
+    el.addEventListener("click",()=>cur===el?clear():show(el));
+  });
+})();
+</script>
 <section class="contact" id="contact"><h2>Contact</h2>
 <p class="ci">Un projet, une question ? Écris-moi, je réponds vite.</p>
 <form id="cf">
@@ -115,6 +160,7 @@ const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
 stats.textContent=V.filter(v=>v.role!=="Cadrage"&&v.type!=="Cadrage").length+" vidéos";
 const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
+window.AVMAP=AV;
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
 // Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
