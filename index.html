@@ -87,7 +87,7 @@
   }
   /* Formats verticaux (Red Vision) : grille 9:16, visible quand le client Red Vision est choisi. */
   .vt{margin:44px 28px 14px;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
-  .gv{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:3px;padding:3px}
+  .gv{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:3px;padding:0 3px 3px}
   .gv .v{aspect-ratio:9/16;display:block;text-decoration:none}
   .gv .v span{opacity:1;background:linear-gradient(#0000,#000c);left:0;right:0;bottom:0;padding:38px 14px 14px}
   .gv .v img{opacity:.92}
@@ -107,10 +107,8 @@
 <style>.cli-t{text-align:center;margin:44px 20px 0;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}</style>
 <div class="cli" id="cli" aria-label="Filtrer par client"></div>
 <div class="bar"><div id="tabs"></div></div>
-<h2 class="vt" id="ht" hidden>Formats horizontaux</h2>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
-<h2 class="vt" id="vt" hidden>Formats verticaux</h2>
 <div class="gv" id="verticaux" hidden></div>
 <section class="about" id="a-propos"><div class="ab-card">
 <h2>À propos</h2><p class="ab-sub">Monteur et cadreur vidéo · Lyon</p>
@@ -285,7 +283,7 @@ function draw(){
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   // Verticaux Red Vision : seulement sur le client Red Vision, sans filtre de catégorie.
   const rv=cl==="Red Vision"&&!f&&window.RVV&&RVV.length;
-  vt.hidden=verticaux.hidden=ht.hidden=!rv;
+  verticaux.hidden=!rv;
   if(rv&&!verticaux.children.length) verticaux.innerHTML=RVV.map(x=>{
     const cap=`<span>${F.esc(x.c)}<small>${F.esc(x.t||"")}${x.d?(x.t?" · ":"")+Math.floor(x.d/60)+":"+String(x.d%60).padStart(2,"0"):""}</small></span>`, im=`<img src="${x.p}" alt="" loading="lazy">`;
     return x.ig?`<a class="v" href="${x.ig}" target="_blank" rel="noopener">${im}${cap}</a>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
