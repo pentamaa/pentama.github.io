@@ -167,7 +167,7 @@
     items.forEach((it,i)=>{
       const p=document.createElement(it.url?"a":it.cl?"button":"div"); p.className="pop"+(it.cl||it.url?" go":"");
       if(it.url){p.href=it.url;p.target="_blank";p.rel="noopener";}
-      if(it.cl&&!it.url){p.type="button";p.onclick=()=>{cl=it.cl;f="";n=PAS;draw();clear();document.getElementById("travaux").scrollIntoView({block:"start"});};}
+      if(it.cl&&!it.url){p.type="button";p.onclick=()=>{cl=it.cl;f="";rc="";n=PAS;draw();clear();document.getElementById("travaux").scrollIntoView({block:"start"});};}
       if(it.cl||it.url) p.title=it.url?"Voir le projet "+it.t:"Voir les vidéos "+(it.cl==="Red Vision"?"Red Vision":it.t);
       p.innerHTML=it.logo!==undefined?`<em>${it.logo?`<img src="${it.logo}" alt="${F.esc(it.t)}">`:`<b>${it.t}</b>`}</em>`:(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
       p.style.left=cx+"px"; p.style.top=cy+"px"; box.appendChild(p);
@@ -238,13 +238,13 @@ cf.addEventListener("submit",async e=>{
   footer .res img{width:28px;height:28px}
   footer .res b{font-weight:inherit}
 </style>
-<script src="data.js?v=20261117124208"></script><script src="rv.js?v=20261117124208"></script><script>
+<script src="data.js?v=20261117124600"></script><script src="rv.js?v=20261117124600"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
 const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
 window.AVMAP=AV;
-const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
+const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS,rc="";
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
 // Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
 // Les projets de cadrage ne sont pas montrés dans « Tout ».
@@ -278,7 +278,13 @@ function draw(){
     const tete=[p,...Object.values(best).sort((a,b)=>b.vues-a.vues)].filter(Boolean);
     L.splice(0,L.length,...tete,...L.filter(v=>!tete.includes(v)));
   }
-  tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("");
+  // Red Vision : pas de catégories (Best Of…), un onglet par client ; les clients à un seul contenu sont groupés dans « Autres ».
+  const RVC={}; if(window.RVV) for(const x of RVV) RVC[x.c]=(RVC[x.c]||0)+1;
+  const RVA="Autres", rvc=x=>RVC[x.c]>1?x.c:RVA;
+  if(cl==="Red Vision"){
+    const ong=Object.keys(RVC).filter(c=>RVC[c]>1).sort((a,b)=>RVC[b]-RVC[a]), nA=Object.keys(RVC).filter(c=>RVC[c]===1).length;
+    tabs.innerHTML=[["",RVV.length],...ong.map(c=>[c,RVC[c]]),...(nA?[[RVA,nA]]:[])].map(([c,k])=>`<button data-rc="${F.esc(c)}" aria-pressed="${c===rc}">${c?F.esc(c):"Tout"} ${k}</button>`).join("");
+  } else tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("");
   cli.className="cli"+(cl?" on":"");
   // Les ronds sont construits une seule fois ; ensuite on ne change que l'état choisi (pas de « saut » au clic).
   if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${nbC(c)} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
@@ -287,16 +293,15 @@ function draw(){
   // Verticaux Red Vision : seulement sur le client Red Vision, sans filtre de catégorie.
   const rv=cl==="Red Vision"&&!f&&window.RVV&&RVV.length;
   verticaux.hidden=!rv;
-  document.querySelector(".bar").style.display=cl==="Red Vision"?"none":"";  // pas de catégories pour les formats verticaux
-  if(rv&&!verticaux.children.length) verticaux.innerHTML=RVV.map(x=>{
+  if(rv&&verticaux.dataset.rc!==rc){verticaux.dataset.rc=rc; verticaux.innerHTML=RVV.filter(x=>!rc||rvc(x)===rc).map(x=>{
     const cap=`<span>${F.esc(x.c)}<small>${F.esc(x.t||"")}${x.d?(x.t?" · ":"")+Math.floor(x.d/60)+":"+String(x.d%60).padStart(2,"0"):""}</small></span>`, im=`<img src="${x.p}" alt="" loading="lazy">`;
     return x.ig?`<button class="v" data-ig="${x.ig.replace(/\/?$/,"/")}">${im}${cap}</button>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
-  }).join("");
+  }).join("");}
   reveal();
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
-tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b){f=b.dataset.c;n=PAS;draw();}});
-cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;draw();}});
+tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return; if(b.dataset.rc!==undefined) rc=b.dataset.rc; else f=b.dataset.c; n=PAS;draw();});
+cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";if(cl==="Red Vision")f="";draw();}});
 more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
 // Lecture d'une vidéo verticale par-dessus la page (même fenêtre que le lecteur YouTube : clic dehors ou Échap pour fermer).
