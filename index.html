@@ -253,7 +253,9 @@ const CADRAGE=v=>v.role==="Cadrage"||v.type==="Cadrage";
 const RVONLY=v=>v.client==="Red Vision";
 const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Et bien d'autres";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
-const noms=F.clients().filter(c=>!AUTRES.includes(c)).sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
+// Nombre de contenus par client ; Red Vision compte ses formats verticaux (il n'a plus de vidéo YouTube dans la liste).
+const nbC=c=>V.filter(v=>v.client===c).length+(c==="Red Vision"&&window.RVV?RVV.length:0);
+const noms=[...new Set([...F.clients(),...(window.RVV&&RVV.length?["Red Vision"]:[])])].filter(c=>!AUTRES.includes(c)).sort((a,b)=>nbC(b)-nbC(a));
 // Apparition des cartes au défilement : fondu depuis 0 et montée depuis le bas, colonne par colonne de gauche à droite.
 const IO="IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches?new IntersectionObserver(es=>{
   for(const e of es) if(e.isIntersecting){e.target.classList.add("in");IO.unobserve(e.target);}
@@ -279,7 +281,7 @@ function draw(){
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("");
   cli.className="cli"+(cl?" on":"");
   // Les ronds sont construits une seule fois ; ensuite on ne change que l'état choisi (pas de « saut » au clic).
-  if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
+  if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${nbC(c)} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
   else cli.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.cl===cl)));
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   // Verticaux Red Vision : seulement sur le client Red Vision, sans filtre de catégorie.
