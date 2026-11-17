@@ -88,6 +88,7 @@
   /* Formats verticaux (Red Vision) : grille 9:16, visible quand le client Red Vision est choisi. */
   .vt{margin:44px 28px 14px;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
   .gv{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:3px;padding:3px 3px 0}
+  .gv[hidden]{display:none}  /* sinon display:grid passe avant l'attribut hidden */
   .gv .v{aspect-ratio:9/16;display:block;text-decoration:none}
   .gv .v span{opacity:1;background:linear-gradient(#0000,#000c);left:0;right:0;bottom:0;padding:38px 14px 14px}
   .gv .v img{opacity:.92}
