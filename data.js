@@ -253,7 +253,7 @@ window.F = {
   clients: () => [...new Set(V.map(v => v.client))],
   // Lecteur commun : clic sur un élément [data-id] -> vidéo par-dessus la page
   lecteur() {
-    const d = document.createElement("div");
+    const d = document.createElement("div"); d.id = "lect";
     d.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:24px;z-index:99";
     document.body.appendChild(d);
     const fermer = () => { d.style.display = "none"; d.innerHTML = ""; };

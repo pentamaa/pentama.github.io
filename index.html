@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@font-face{font-family:Inter;src:url(fonts/inter.woff2) format("woff2");font-weight:100 900;font-display:swap}</style>
 <title>Matéo — Monteur et cadreur vidéo</title>
 <style>
   :root{--bg:#060606;--fg:#fafafa;--mut:#7a7a7a;--line:#1f1f1f}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--fg);font:14px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif}
+  body{background:var(--bg);color:var(--fg);font:14px/1.5 Inter,"Helvetica Neue",Helvetica,Arial,sans-serif}
   nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;padding:18px 28px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:linear-gradient(#000a,#0000)}
   nav a{color:var(--fg);text-decoration:none;margin-left:24px;opacity:.7}
   .hero{position:relative;height:min(78vh,56.25vw);min-height:360px;overflow:hidden;background:#000}
@@ -12,6 +13,8 @@
   .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(#0000 55%,#060606)}
   .hero div{position:absolute;left:28px;right:28px;bottom:28px;z-index:2}
   .hero h1{font-size:clamp(34px,6vw,76px);font-weight:700;letter-spacing:-.03em;line-height:1}
+  .hero h1 .sep{font-weight:300;color:#666;margin:0 .05em}
+  .hero h1 .pse{font-weight:300;color:#cfcfcf}
   .hero p{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#bbb;margin-top:10px}
   .hero p b{color:#fff;font-weight:600}
   .bar{display:flex;justify-content:space-between;gap:16px 26px;flex-wrap:wrap;padding:26px 28px 14px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
@@ -23,29 +26,77 @@
   .bar button:focus-visible,.more:focus-visible,.v:focus-visible{outline:1px solid #fff;outline-offset:3px}
   .g{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px}
   .v{position:relative;border:0;padding:0;cursor:pointer;background:#111;overflow:hidden;aspect-ratio:16/9}
-  .v img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s,opacity .3s;opacity:.88}
-  .v:hover img{transform:scale(1.04);opacity:.3}
-  .v span{position:absolute;left:18px;right:18px;bottom:16px;text-align:left;color:#fff;font:600 12px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:0;transition:opacity .3s}
+  .v img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease,opacity .2s ease;opacity:.88;will-change:transform}
+  @media(hover:hover) and (pointer:fine){.v:hover img{transform:scale(1.04);opacity:.3}}
+  .v span{position:absolute;left:18px;right:18px;bottom:16px;text-align:left;color:#fff;font:600 12px/1.4 Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:0;transition:opacity .3s}
   .v span small{display:block;color:#aaa;font-weight:400;margin-top:4px}
-  .v:hover span{opacity:1}
-  .more{display:block;margin:28px auto 8px;background:none;border:1px solid #333;color:var(--fg);font:600 12px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:14px 28px;cursor:pointer}
+  @media(hover:hover) and (pointer:fine){.v:hover span{opacity:1}}
+  .more{display:block;margin:28px auto 8px;background:none;border:1px solid #333;color:var(--fg);font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:14px 28px;cursor:pointer}
   .more:hover{border-color:#fff}
   footer{display:flex;justify-content:space-between;padding:28px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
   footer a{color:var(--fg);text-decoration:none}
   @media(max-width:1000px){.g{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:640px){.g{grid-template-columns:1fr}.v span{opacity:1}.v img{opacity:.5}}
-  .cli{display:flex;gap:18px 0;flex-wrap:wrap;justify-content:center;padding:34px 28px 6px}
-  .cli button{width:112px;text-align:center;line-height:1.3}
-  .cli button{background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--fg);font:600 10px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;transition:filter .25s,opacity .25s}
-  .cli img,.cli i{width:58px;height:58px;border-radius:50%;object-fit:cover;display:block;background:#222;border:2px solid transparent;font-style:normal;line-height:54px;font-size:20px}
+  .cli{display:flex;gap:18px 0;flex-wrap:wrap;justify-content:center;padding:22px 28px 6px}
+  /* Clients : légèrement grisés avec un halo léger ; au survol le rond grossit (les voisins s'écartent), pleine opacité, halo plus fort. */
+  .cli button{width:112px;text-align:center;line-height:1.3;background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--fg);font:600 10px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:.72;filter:grayscale(.55);transition:width .25s ease,filter .2s ease,opacity .2s ease}
+  .cli img,.cli i{width:58px;height:58px;will-change:transform;border-radius:50%;object-fit:cover;display:block;background:#222;border:2px solid transparent;font-style:normal;line-height:54px;font-size:20px;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 0 12px rgba(255,255,255,.10);transition:transform .25s ease,box-shadow .25s ease,border-color .2s ease}
+  @media(hover:hover) and (pointer:fine){
+    .cli button:hover{width:128px;opacity:1;filter:none}
+    .cli button:hover .av{transform:scale(1.2)}
+    .cli button:hover img,.cli button:hover i{box-shadow:0 0 0 2px rgba(255,255,255,.35),0 0 26px 4px rgba(255,255,255,.28)}
+    .cli.on button:hover{filter:none;opacity:1}
+  }
+  /* Un client choisi : comportement d'avant (les autres grisés, le choisi normal avec un contour blanc). */
   .cli.on button{filter:grayscale(1);opacity:.4}
   .cli.on button[aria-pressed=true]{filter:none;opacity:1}
-  .cli.on button[aria-pressed=true] img{border-color:#fff}
-  .cli button:hover{filter:none;opacity:1}
+  /* Anneau en chrome gris qui tourne (inspiration collectui, @tojawuzik) : au survol et sur le client choisi. */
+  .cli .av{position:relative;display:block;margin:6px 0;border-radius:50%;transition:transform .25s ease;will-change:transform}
+  .cli .av::before{content:"";position:absolute;inset:-3px;border-radius:50%;z-index:0;opacity:0;transition:opacity .25s ease;
+    background:conic-gradient(from 0deg,#ffffff,#9aa0ab 40deg,#e9ecf2 85deg,#4a4f59 130deg,#d5d9e1 175deg,#ffffff 210deg,#6e737d 255deg,#f2f4f8 300deg,#8d929c 335deg,#ffffff);animation:chrome 3s linear infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,.35))}
+  .cli .av img,.cli .av i{position:relative;z-index:1}
+  @media(hover:hover) and (pointer:fine){
+    .cli button:hover .av::before{opacity:1}
+  }
+  .cli button[aria-pressed=true] .av::before{opacity:1}
+  .cli.on button[aria-pressed=true] img,.cli.on button[aria-pressed=true] i{border-color:#0a0a0a}
+  @keyframes chrome{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.cli .av::before{animation:none}}
   .cli button:focus-visible{outline:1px solid #fff;outline-offset:4px}
+  .v{opacity:0;transform:translateY(48px);transition:opacity .6s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1);will-change:transform,opacity}
+  .v.in{opacity:1;transform:none}
+
+  /* Fond noir ; seul le bas de la page s'éclaire en fondu gris. */
+  footer{position:relative;isolation:isolate}
+  footer::before{content:"";position:absolute;left:0;right:0;bottom:0;height:420px;z-index:-1;pointer-events:none;
+    background:radial-gradient(120% 100% at 50% 100%,rgba(200,200,200,.16),rgba(120,120,120,.06) 45%,transparent 75%)}
+  /* Animations (règles « web-animation-design » d'après Emil Kowalski) */
+  html{scroll-behavior:smooth}
+  .more,.contact button,.bar button{transition:transform .1s ease,border-color .15s ease,color .15s ease}
+  .more:active,.contact button:active,.bar button:active,footer .res a:active{transform:scale(.97)}
+  .hero div{animation:entree .9s cubic-bezier(.23,1,.32,1) .15s both}
+  @keyframes entree{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  #lect{animation:fondu .25s cubic-bezier(.23,1,.32,1)}
+  #lect>*{animation:monte .3s cubic-bezier(.23,1,.32,1)}
+  @keyframes fondu{from{opacity:0}}
+  @keyframes monte{from{opacity:0;transform:scale(.96)}}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none;transition:none}
+    .v{opacity:1;transform:none}
+  }
 </style></head><body>
-<nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="#contact">Contact</a></span></nav>
-<section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Mateo</h1><p>Monteur vidéo · <b id="stats"></b></p></div></section>
+<nav><span>Matéo <span style="opacity:.45;font-weight:400">⎮</span> <span style="opacity:.7;font-weight:400">Pentama</span></span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="#contact">Contact</a><span class="nsoc"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener" title="Instagram @pentamaa" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt=""></a><a href="#" id="dc2" title="Discord : pentama (cliquer pour copier)" aria-label="Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""></a></span></span></nav>
+<style>
+  nav .nsoc{display:inline-flex;gap:14px;margin-left:24px;padding-left:20px;border-left:1px solid #ffffff33;vertical-align:middle}
+  nav .nsoc a{margin:0;opacity:.7;display:inline-flex;transition:opacity .2s}
+  nav .nsoc a:hover{opacity:1}
+  nav .nsoc img{width:15px;height:15px;display:block}
+</style>
+<script>dc2.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama").catch(()=>{});dc2.title="Pseudo Discord copié ✓";setTimeout(()=>dc2.title="Discord : pentama (cliquer pour copier)",1500);});</script>
+<section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Matéo <span class="sep">⎮</span> <span class="pse">Pentama</span></h1><p>Monteur vidéo</p></div></section>
+<h2 class="cli-t">Ils me font confiance</h2>
+<style>.cli-t{text-align:center;margin:44px 20px 0;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}</style>
 <div class="cli" id="cli" aria-label="Filtrer par client"></div>
 <div class="bar"><div id="tabs"></div></div>
 <main class="g" id="travaux"></main>
@@ -68,25 +119,33 @@
   .hv{color:#fff;border-bottom:1px dashed #555;cursor:default;transition:border-color .2s}
   .hv:hover,.hv.on{border-color:#fff}
   .ab-pops{position:absolute;inset:0;pointer-events:none;overflow:visible}
-  .pop{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;opacity:0;transform:translate(-50%,-50%) scale(.6);transition:transform .45s cubic-bezier(.2,.9,.3,1.3),opacity .3s;white-space:nowrap}
+  .pop{position:absolute;left:0;top:0;display:flex;align-items:center;gap:8px;opacity:0;transform:translate(-50%,-50%) scale(.9);transition:transform .32s cubic-bezier(.23,1,.32,1),opacity .22s ease-out;will-change:transform,opacity;white-space:nowrap}
   .pop img{width:46px;height:46px;border-radius:50%;object-fit:cover;box-shadow:0 8px 24px #000a;border:2px solid #111}
-  .pop span{font:700 13px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#1c1c1c;border:1px solid #333;border-radius:999px;padding:7px 13px;box-shadow:0 8px 24px #000a}
+  .pop span{font:700 13px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#1c1c1c;border:1px solid #333;border-radius:999px;padding:7px 13px;box-shadow:0 8px 24px #000a}
   .pop.show{opacity:1}
+  .pop.go{pointer-events:none;background:none;border:0;padding:0;cursor:pointer;text-decoration:none;font:inherit;color:inherit}
+  .pop.go.show{pointer-events:auto}
+  .pop.go>*{transition:transform .2s ease,box-shadow .2s ease}
+  @media(hover:hover) and (pointer:fine){.pop.go:hover>*{transform:scale(1.08);box-shadow:0 10px 30px #000c,0 0 0 2px #fff}}
+  .pop.go:active>*{transform:scale(.97)}
   .pop em{display:flex;align-items:center;justify-content:center;background:#fff;border-radius:999px;padding:10px 18px;box-shadow:0 8px 24px #000a;height:46px}
-  .pop em b{font:700 18px "Helvetica Neue",Helvetica,Arial,sans-serif;color:#111;letter-spacing:.1em}
+  .pop em b{font:700 18px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;color:#111;letter-spacing:.1em}
   .pop em img{width:auto;height:22px;max-width:130px;border-radius:0;border:0;box-shadow:none;object-fit:contain}
-  @media(prefers-reduced-motion:reduce){.pop{transition:opacity .2s}}
+
 </style>
 <script>
 (()=>{
   const card=document.querySelector(".ab-card"), box=document.getElementById("abpops");
-  const img=c=>(window.AVMAP||{})[c]?{img:window.AVMAP[c],t:c}:{t:c};
+  const img=c=>(window.AVMAP||{})[c]?{img:window.AVMAP[c],t:c,cl:c}:{t:c,cl:c};
+  // Lien vers un contenu fait pour chaque marque (à remplir) ; sans lien, le clic montre les vidéos Red Vision.
+  const LIENS={Bulgari:"",EHL:"","Bernard Nicod":"","Vacheron Constantin":""};
+  const marque=(logo,t)=>({logo,t,cl:"Red Vision",url:LIENS[t]||""});
   const best=t=>[...new Set(V.filter(v=>v.type===t).sort((a,b)=>b.vues-a.vues).map(v=>v.client))].filter(c=>!["Noa"].includes(c)).slice(0,4);
   const SETS={
     createurs:()=>["Skinra","Domingo","Pearja","Idreau","Dooms","French Hardware"].map(img),
     gaming:()=>best("Gaming / Best Of").map(img),
     longs:()=>best("Concept / IRL").map(img),
-    redvision:()=>[{img:"avatars/red-vision.jpg",t:""},{logo:"logos/bulgari.svg",t:"Bulgari"},{logo:"logos/ehl.png",t:"EHL"},{logo:"logos/nicod.svg",t:"Bernard Nicod"},{logo:"logos/vacheron.svg",t:"Vacheron Constantin"},{logo:"",t:"…"}],
+    redvision:()=>[marque("logos/bulgari.svg","Bulgari"),marque("logos/ehl.png","EHL"),marque("logos/nicod.svg","Bernard Nicod"),marque("logos/vacheron.svg","Vacheron Constantin"),{logo:"",t:"…",cl:"Red Vision"}],
     outils:()=>[{t:"Premiere Pro"},{t:"After Effects"},{t:"DaVinci Resolve"}]
   };
   let cur=null, timers=[];
@@ -96,27 +155,34 @@
     const items=SETS[el.dataset.pop](), rc=card.getBoundingClientRect(), re=el.getBoundingClientRect();
     const cx=re.left-rc.left+re.width/2, cy=re.top-rc.top+re.height/2, n=items.length;
     items.forEach((it,i)=>{
-      const p=document.createElement("div"); p.className="pop";
+      const p=document.createElement(it.url?"a":it.cl?"button":"div"); p.className="pop"+(it.cl||it.url?" go":"");
+      if(it.url){p.href=it.url;p.target="_blank";p.rel="noopener";}
+      if(it.cl&&!it.url){p.type="button";p.onclick=()=>{cl=it.cl;f="";n=PAS;draw();clear();document.getElementById("travaux").scrollIntoView({block:"start"});};}
+      if(it.cl||it.url) p.title=it.url?"Voir le projet "+it.t:"Voir les vidéos "+(it.cl==="Red Vision"?"Red Vision":it.t);
       p.innerHTML=it.logo!==undefined?`<em>${it.logo?`<img src="${it.logo}" alt="${F.esc(it.t)}">`:`<b>${it.t}</b>`}</em>`:(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
       p.style.left=cx+"px"; p.style.top=cy+"px"; box.appendChild(p);
       // Éventail au-dessus du mot : écart réglé sur la largeur des bulles, recadré pour rester dans la carte.
-      const w=items.some(x=>x.logo!==undefined)?150:items.some(x=>!x.img)?135:66;
+      const w=items.some(x=>x.logo!==undefined)?108:items.some(x=>!x.img)?100:36;   // bulles serrées, qui se chevauchent
       let dx=(i-(n-1)/2)*w; const half=(n-1)/2*w+w/2, lim=rc.width/2-20;
       if(half>lim) dx*=lim/half;
       const bx=Math.min(Math.max(cx,half>lim?rc.width/2:half+10),rc.width-half-10);
-      const dy=-70-(i%2)*46;
+      const dy=-64-(i%2)*22; p.style.zIndex=10+i;
       timers.push(setTimeout(()=>{p.classList.add("show");p.style.transform=`translate(calc(-50% + ${bx-cx+dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${(i%2?1:-1)*(3+i%3*2)}deg)`;},20+i*45));
     });
   }
+  // Les bulles restent ouvertes le temps d'aller cliquer dessus.
+  let shut=null; const later=()=>{clearTimeout(shut);shut=setTimeout(clear,260);}, keep=()=>clearTimeout(shut);
+  box.addEventListener("mouseover",e=>{if(e.target.closest(".pop"))keep();});
+  box.addEventListener("mouseout",e=>{if(e.target.closest(".pop"))later();});
   card.querySelectorAll(".hv").forEach(el=>{
-    el.addEventListener("mouseenter",()=>show(el));
-    el.addEventListener("mouseleave",clear);
+    el.addEventListener("mouseenter",()=>{keep();show(el);});
+    el.addEventListener("mouseleave",later);
     el.addEventListener("click",()=>cur===el?clear():show(el));
   });
 })();
 </script>
 <section class="contact" id="contact"><h2>Contact</h2>
-<p class="ci">Un projet, une question ? Écris-moi, je réponds vite.</p>
+<p class="ci">On avance ensemble ? Contactez-moi !</p>
 <form id="cf">
   <div class="row"><label>Nom<input name="nom" required autocomplete="name"></label><label>E-mail<input name="email" type="email" required autocomplete="email"></label></div>
   <label>Message<textarea name="message" rows="5" required></textarea></label>
@@ -130,10 +196,10 @@
   .contact form{display:flex;flex-direction:column;gap:16px}
   .contact .row{display:flex;gap:16px;flex-wrap:wrap}.contact .row label{flex:1;min-width:220px}
   .contact label{display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-  .contact input,.contact textarea{background:#0e0e0e;border:1px solid #2a2a2a;color:var(--fg);font:15px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;padding:12px 14px;resize:vertical;text-transform:none;letter-spacing:0}
+  .contact input,.contact textarea{background:#0e0e0e;border:1px solid #2a2a2a;color:var(--fg);font:15px/1.5 Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:12px 14px;resize:vertical;text-transform:none;letter-spacing:0}
   .contact input:focus,.contact textarea:focus{outline:none;border-color:#fff}
   .contact .hp{display:none}
-  .contact button{align-self:flex-start;background:#fafafa;color:#060606;border:0;font:600 12px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:14px 32px;cursor:pointer}
+  .contact button{align-self:flex-start;background:#fafafa;color:#060606;border:0;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:14px 32px;cursor:pointer}
   .contact button:disabled{opacity:.5;cursor:default}
   #cfm{font-size:14px;color:#bbb;min-height:1.4em}
 </style>
@@ -147,12 +213,12 @@ cf.addEventListener("submit",async e=>{
       body:JSON.stringify({name:d.nom,email:d.email,message:d.message,_replyto:d.email,_subject:"Portfolio : message de "+d.nom,_template:"table",_captcha:"false"})});
     const j=await r.json();
     if(!r.ok||String(j.success)!=="true") throw 0;
-    cf.reset(); cfm.textContent="Message envoyé, merci ! Je te réponds vite.";
-  }catch(_){cfm.innerHTML='Envoi impossible pour le moment. Écris-moi sur <a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener" style="color:#fff">Instagram</a>.';}
+    cf.reset(); cfm.textContent="Message envoyé, merci ! Je vous réponds rapidement.";
+  }catch(_){cfm.innerHTML='Envoi impossible pour le moment. Écrivez-moi sur <a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener" style="color:#fff">Instagram</a>.';}
   b.disabled=false;
 });
 </script>
-<footer><div class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt="">@pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""><b>pentama</b></a></div><span>© 2026 Mateo</span></footer>
+<footer><div class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt="">@pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""><b>pentama</b></a></div><span>© 2026 Matéo ⎮ Pentama</span></footer>
 <script>const dcn=dc.querySelector("b");dc.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama");dcn.textContent="Pseudo copié ✓";setTimeout(()=>dcn.textContent="pentama",1500);});</script>
 <style>
   footer{flex-direction:column;align-items:center;gap:18px;padding:40px 28px}
@@ -166,7 +232,6 @@ cf.addEventListener("submit",async e=>{
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
-stats.textContent=V.filter(v=>v.role!=="Cadrage"&&v.type!=="Cadrage").length+" vidéos";
 const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
 window.AVMAP=AV;
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
@@ -174,9 +239,21 @@ const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
 // Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
 // Les projets de cadrage ne sont pas montrés dans « Tout ».
 const CADRAGE=v=>v.role==="Cadrage"||v.type==="Cadrage";
-const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Autres clients";
+const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Et bien d'autres";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 const noms=F.clients().filter(c=>!AUTRES.includes(c)).sort((a,b)=>V.filter(v=>v.client===b).length-V.filter(v=>v.client===a).length);
+// Apparition des cartes au défilement : fondu depuis 0 et montée depuis le bas, colonne par colonne de gauche à droite.
+const IO="IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches?new IntersectionObserver(es=>{
+  for(const e of es) if(e.isIntersecting){e.target.classList.add("in");IO.unobserve(e.target);}
+},{rootMargin:"0px 0px -8% 0px",threshold:.12}):null;
+function reveal(){
+  const cols=getComputedStyle(travaux).gridTemplateColumns.split(" ").length||3;
+  travaux.querySelectorAll(".v").forEach((c,i)=>{
+    if(!IO){c.classList.add("in");return;}
+    c.style.transitionDelay=(i%cols)*110+"ms";
+    IO.observe(c);
+  });
+}
 function draw(){
   const L=V.filter(v=>(f?v.type===f:!CADRAGE(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).sort((a,b)=>b.date.localeCompare(a.date));
   // Fort Boyard (Domingo) toujours en premier dans « Tout ».
@@ -189,8 +266,11 @@ function draw(){
   }
   tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>c?v.type===c:!CADRAGE(v)).length}</button>`).join("");
   cli.className="cli"+(cl?" on":"");
-  cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><i>+</i>${AC}</button>`;
+  // Les ronds sont construits une seule fois ; ensuite on ne change que l'état choisi (pas de « saut » au clic).
+  if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${V.filter(v=>v.client===c).length} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
+  else cli.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.cl===cl)));
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
+  reveal();
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
 tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b){f=b.dataset.c;n=PAS;draw();}});
