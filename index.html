@@ -73,6 +73,7 @@
   .pop span{font:700 13px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#1c1c1c;border:1px solid #333;border-radius:999px;padding:7px 13px;box-shadow:0 8px 24px #000a}
   .pop.show{opacity:1}
   .pop em{display:flex;align-items:center;justify-content:center;background:#fff;border-radius:999px;padding:10px 18px;box-shadow:0 8px 24px #000a;height:46px}
+  .pop em b{font:700 18px "Helvetica Neue",Helvetica,Arial,sans-serif;color:#111;letter-spacing:.1em}
   .pop em img{width:auto;height:22px;max-width:130px;border-radius:0;border:0;box-shadow:none;object-fit:contain}
   @media(prefers-reduced-motion:reduce){.pop{transition:opacity .2s}}
 </style>
@@ -85,7 +86,7 @@
     createurs:()=>["Skinra","Domingo","Pearja","Idreau","Dooms","French Hardware"].map(img),
     gaming:()=>best("Gaming / Best Of").map(img),
     longs:()=>best("Concept / IRL").map(img),
-    redvision:()=>[{img:"avatars/red-vision.jpg",t:""},{logo:"logos/bulgari.svg",t:"Bulgari"},{logo:"logos/ehl.webp",t:"EHL"},{logo:"logos/nicod.svg",t:"Bernard Nicod"},{logo:"logos/vacheron.svg",t:"Vacheron Constantin"},{t:"…"}],
+    redvision:()=>[{img:"avatars/red-vision.jpg",t:""},{logo:"logos/bulgari.svg",t:"Bulgari"},{logo:"logos/ehl.webp",t:"EHL"},{logo:"logos/nicod.svg",t:"Bernard Nicod"},{logo:"logos/vacheron.svg",t:"Vacheron Constantin"},{logo:"",t:"…"}],
     outils:()=>[{t:"Premiere Pro"},{t:"After Effects"},{t:"DaVinci Resolve"}]
   };
   let cur=null, timers=[];
@@ -96,10 +97,15 @@
     const cx=re.left-rc.left+re.width/2, cy=re.top-rc.top+re.height/2, n=items.length;
     items.forEach((it,i)=>{
       const p=document.createElement("div"); p.className="pop";
-      p.innerHTML=it.logo?`<em><img src="${it.logo}" alt="${F.esc(it.t)}"></em>`:(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
+      p.innerHTML=it.logo!==undefined?`<em>${it.logo?`<img src="${it.logo}" alt="${F.esc(it.t)}">`:`<b>${it.t}</b>`}</em>`:(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
       p.style.left=cx+"px"; p.style.top=cy+"px"; box.appendChild(p);
-      const ang=-Math.PI*(.15+.7*(n>1?i/(n-1):.5)), rad=70+(i%2)*28;
-      timers.push(setTimeout(()=>{p.classList.add("show");p.style.transform=`translate(calc(-50% + ${Math.cos(ang)*rad*1.6}px), calc(-50% + ${Math.sin(ang)*rad}px)) scale(1) rotate(${(i%2?1:-1)*(4+i*2)}deg)`;},20+i*45));
+      // Éventail au-dessus du mot : écart réglé sur la largeur des bulles, recadré pour rester dans la carte.
+      const w=items.some(x=>x.logo!==undefined)?150:items.some(x=>!x.img)?135:66;
+      let dx=(i-(n-1)/2)*w; const half=(n-1)/2*w+w/2, lim=rc.width/2-20;
+      if(half>lim) dx*=lim/half;
+      const bx=Math.min(Math.max(cx,half>lim?rc.width/2:half+10),rc.width-half-10);
+      const dy=-70-(i%2)*46;
+      timers.push(setTimeout(()=>{p.classList.add("show");p.style.transform=`translate(calc(-50% + ${bx-cx+dx}px), calc(-50% + ${dy}px)) scale(1) rotate(${(i%2?1:-1)*(3+i%3*2)}deg)`;},20+i*45));
     });
   }
   card.querySelectorAll(".hv").forEach(el=>{
