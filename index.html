@@ -238,7 +238,7 @@ cf.addEventListener("submit",async e=>{
   footer .res img{width:28px;height:28px}
   footer .res b{font-weight:inherit}
 </style>
-<script src="data.js?v=20261117142356"></script><script src="rv.js?v=20261117142356"></script><script>
+<script src="data.js?v=20261117170549"></script><script src="sk.js?v=20261117170549"></script><script src="rv.js?v=20261117170549"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
@@ -254,7 +254,9 @@ const RVONLY=v=>v.client==="Red Vision";
 const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Et bien d'autres";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 // Nombre de contenus par client ; Red Vision compte ses formats verticaux (il n'a plus de vidéo YouTube dans la liste).
-const nbC=c=>V.filter(v=>v.client===c).length+(c==="Red Vision"&&window.RVV?RVV.length:0);
+const nbC=c=>V.filter(v=>v.client===c).length+(c==="Red Vision"&&window.RVV?RVV.length:0)+(c==="Skinra"&&window.SKV?SKV.length:0);
+// Shorts TikTok : onglet « Shorts » visible seulement sur le filtre Skinra.
+const SH="Shorts", shOk=()=>cl==="Skinra"&&window.SKV&&SKV.length;
 const noms=[...new Set([...F.clients(),...(window.RVV&&RVV.length?["Red Vision"]:[])])].filter(c=>!AUTRES.includes(c)).sort((a,b)=>nbC(b)-nbC(a));
 // Apparition des cartes au défilement : fondu depuis 0 et montée depuis le bas, colonne par colonne de gauche à droite.
 const IO="IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches?new IntersectionObserver(es=>{
@@ -284,24 +286,26 @@ function draw(){
   if(cl==="Red Vision"){
     const ong=Object.keys(RVC).filter(c=>RVC[c]>1).sort((a,b)=>RVC[b]-RVC[a]), nA=Object.keys(RVC).filter(c=>RVC[c]===1).length;
     tabs.innerHTML=[["",RVV.length],...ong.map(c=>[c,RVC[c]]),...(nA?[[RVA,nA]]:[])].map(([c,k])=>`<button data-rc="${F.esc(c)}" aria-pressed="${c===rc}">${c?F.esc(c):"Tout"} ${k}</button>`).join("");
-  } else tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("");
+  } else tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("")+(shOk()?`<button data-c="${SH}" aria-pressed="${f===SH}">${SH} ${SKV.length}</button>`:"");
   cli.className="cli"+(cl?" on":"");
   // Les ronds sont construits une seule fois ; ensuite on ne change que l'état choisi (pas de « saut » au clic).
   if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${nbC(c)} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
   else cli.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.cl===cl)));
   travaux.innerHTML=L.slice(0,n).map(v=>`<button class="v" data-id="${v.id}"><img src="${F.img(v.id)}" onerror="this.onerror=null;this.src='${F.mini(v.id)}'" alt="" loading="lazy"><span>${F.esc(v.client)} — ${F.esc(v.titre)}<small>${F.esc(v.role)} · ${F.vues(v.vues)} vues · ${F.annee(v.date)}</small></span></button>`).join("");
   // Verticaux Red Vision : seulement sur le client Red Vision, sans filtre de catégorie.
-  const rv=cl==="Red Vision"&&!f&&window.RVV&&RVV.length;
-  verticaux.hidden=!rv;
-  if(rv&&verticaux.dataset.rc!==rc){verticaux.dataset.rc=rc; verticaux.innerHTML=RVV.filter(x=>!rc||rvc(x)===rc).map(x=>{
+  const rv=cl==="Red Vision"&&!f&&window.RVV&&RVV.length, sk=shOk()&&f===SH;
+  verticaux.hidden=!(rv||sk);
+  const cle=sk?"sk":"rv:"+rc;
+  if((rv||sk)&&verticaux.dataset.rc!==cle){verticaux.dataset.rc=cle; verticaux.innerHTML=(sk?SKV:RVV.filter(x=>!rc||rvc(x)===rc)).map(x=>{
     const cap=`<span>${F.esc(x.c)}<small>${F.esc(x.t||"")}${x.d?(x.t?" · ":"")+Math.floor(x.d/60)+":"+String(x.d%60).padStart(2,"0"):""}</small></span>`, im=`<img src="${x.p}" alt="" loading="lazy">`;
+    if(x.tk) return `<button class="v" data-tk="${x.tk}">${im}${cap}</button>`;
     return x.ig?`<button class="v" data-ig="${x.ig.replace(/\/?$/,"/")}">${im}${cap}</button>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
   }).join("");}
   reveal();
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
 tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return; if(b.dataset.rc!==undefined) rc=b.dataset.rc; else f=b.dataset.c; n=PAS;draw();});
-cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";if(cl==="Red Vision")f="";draw();}});
+cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";if(cl==="Red Vision"||(f===SH&&cl!=="Skinra"))f="";draw();}});
 more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
 // Toujours ouvrir en haut du site : pas de retour à l'ancienne position au rechargement, ni de saut vers #a-propos / #contact.
@@ -315,10 +319,10 @@ document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.addEventListener("cli
 }));
 // Lecture d'une vidéo verticale par-dessus la page (même fenêtre que le lecteur YouTube : clic dehors ou Échap pour fermer).
 document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-src],[data-ig]"); if(!b) return;
+  const b=e.target.closest("[data-src],[data-ig],[data-tk]"); if(!b) return;
   const d=document.getElementById("lect"); if(!d) return;
   d.innerHTML=b.dataset.src?`<video src="${b.dataset.src}" controls autoplay playsinline></video>`
-    :`<iframe src="${b.dataset.ig}embed/" style="height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;max-width:100%;border:0;border-radius:8px;background:#000" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    :`<iframe src="${b.dataset.tk?"https://www.tiktok.com/player/v1/"+b.dataset.tk+"?autoplay=1&description=1&music_info=0":b.dataset.ig+"embed/"}" style="height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;max-width:100%;border:0;border-radius:8px;background:#000" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   d.style.display="flex";
 });
 </script></body></html>
