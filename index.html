@@ -87,7 +87,7 @@
   }
   /* Formats verticaux (Red Vision) : grille 9:16, visible quand le client Red Vision est choisi. */
   .vt{margin:44px 28px 14px;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}
-  .gv{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:3px;padding:0 3px 3px}
+  .gv{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:3px;padding:3px 3px 0}
   .gv .v{aspect-ratio:9/16;display:block;text-decoration:none}
   .gv .v span{opacity:1;background:linear-gradient(#0000,#000c);left:0;right:0;bottom:0;padding:38px 14px 14px}
   .gv .v img{opacity:.92}
@@ -107,9 +107,9 @@
 <style>.cli-t{text-align:center;margin:44px 20px 0;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}</style>
 <div class="cli" id="cli" aria-label="Filtrer par client"></div>
 <div class="bar"><div id="tabs"></div></div>
+<div class="gv" id="verticaux" hidden></div>
 <main class="g" id="travaux"></main>
 <button class="more" id="more"></button>
-<div class="gv" id="verticaux" hidden></div>
 <section class="about" id="a-propos"><div class="ab-card">
 <h2>À propos</h2><p class="ab-sub">Monteur et cadreur vidéo · Lyon</p>
 <p><b>Monteur vidéo freelance depuis 2022</b>, j'aide les <span class="hv" data-pop="createurs">créateurs de contenu</span> et les marques à faire des vidéos qui retiennent l'attention.</p>
