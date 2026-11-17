@@ -238,7 +238,7 @@ cf.addEventListener("submit",async e=>{
   footer .res img{width:28px;height:28px}
   footer .res b{font-weight:inherit}
 </style>
-<script src="data.js?v=20261117124600"></script><script src="rv.js?v=20261117124600"></script><script>
+<script src="data.js?v=20261117124948"></script><script src="rv.js?v=20261117124948"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
@@ -304,6 +304,15 @@ tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)retur
 cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";if(cl==="Red Vision")f="";draw();}});
 more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
+// Toujours ouvrir en haut du site : pas de retour à l'ancienne position au rechargement, ni de saut vers #a-propos / #contact.
+try{history.scrollRestoration="manual";}catch(_){}
+if(location.hash){history.replaceState(null,"",location.pathname+location.search);}
+scrollTo(0,0); addEventListener("load",()=>scrollTo(0,0));
+// Les liens du menu font défiler jusqu'à la section sans laisser de #… dans l'adresse.
+document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
+  const t=document.querySelector(a.getAttribute("href")); if(!t) return;
+  e.preventDefault(); t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}));
 // Lecture d'une vidéo verticale par-dessus la page (même fenêtre que le lecteur YouTube : clic dehors ou Échap pour fermer).
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-src],[data-ig]"); if(!b) return;
