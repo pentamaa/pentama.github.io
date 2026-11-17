@@ -287,6 +287,7 @@ function draw(){
   // Verticaux Red Vision : seulement sur le client Red Vision, sans filtre de catégorie.
   const rv=cl==="Red Vision"&&!f&&window.RVV&&RVV.length;
   verticaux.hidden=!rv;
+  document.querySelector(".bar").style.display=cl==="Red Vision"?"none":"";  // pas de catégories pour les formats verticaux
   if(rv&&!verticaux.children.length) verticaux.innerHTML=RVV.map(x=>{
     const cap=`<span>${F.esc(x.c)}<small>${F.esc(x.t||"")}${x.d?(x.t?" · ":"")+Math.floor(x.d/60)+":"+String(x.d%60).padStart(2,"0"):""}</small></span>`, im=`<img src="${x.p}" alt="" loading="lazy">`;
     return x.ig?`<a class="v" href="${x.ig}" target="_blank" rel="noopener">${im}${cap}</a>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
