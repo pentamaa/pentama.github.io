@@ -93,7 +93,7 @@
   .gv .v span{opacity:1;background:linear-gradient(#0000,#000c);left:0;right:0;bottom:0;padding:38px 14px 14px}
   .gv .v img{opacity:.92}
   @media(hover:hover) and (pointer:fine){.gv .v:hover img{opacity:.55}}
-  #lect video{max-width:100%;max-height:calc(100vh - 48px);border-radius:8px;background:#000}
+  #lect video{height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;max-width:100%;border-radius:8px;background:#000;object-fit:contain}
 </style></head><body>
 <nav><span>Matéo <span style="opacity:.45;font-weight:400">⎮</span> <span style="opacity:.7;font-weight:400">Pentama</span></span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="#contact">Contact</a><span class="nsoc"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener" title="Instagram @pentamaa" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt=""></a><a href="#" id="dc2" title="Discord : pentama (cliquer pour copier)" aria-label="Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""></a></span></span></nav>
 <style>
@@ -290,7 +290,7 @@ function draw(){
   document.querySelector(".bar").style.display=cl==="Red Vision"?"none":"";  // pas de catégories pour les formats verticaux
   if(rv&&!verticaux.children.length) verticaux.innerHTML=RVV.map(x=>{
     const cap=`<span>${F.esc(x.c)}<small>${F.esc(x.t||"")}${x.d?(x.t?" · ":"")+Math.floor(x.d/60)+":"+String(x.d%60).padStart(2,"0"):""}</small></span>`, im=`<img src="${x.p}" alt="" loading="lazy">`;
-    return x.ig?`<a class="v" href="${x.ig}" target="_blank" rel="noopener">${im}${cap}</a>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
+    return x.ig?`<button class="v" data-ig="${x.ig.replace(/\/?$/,"/")}">${im}${cap}</button>`:`<button class="v" data-src="${x.src}">${im}${cap}</button>`;
   }).join("");
   reveal();
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
@@ -301,8 +301,10 @@ more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
 // Lecture d'une vidéo verticale par-dessus la page (même fenêtre que le lecteur YouTube : clic dehors ou Échap pour fermer).
 document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-src]"); if(!b) return;
+  const b=e.target.closest("[data-src],[data-ig]"); if(!b) return;
   const d=document.getElementById("lect"); if(!d) return;
-  d.innerHTML=`<video src="${b.dataset.src}" controls autoplay playsinline></video>`; d.style.display="flex";
+  d.innerHTML=b.dataset.src?`<video src="${b.dataset.src}" controls autoplay playsinline></video>`
+    :`<iframe src="${b.dataset.ig}embed/" style="height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;max-width:100%;border:0;border-radius:8px;background:#000" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  d.style.display="flex";
 });
 </script></body></html>
