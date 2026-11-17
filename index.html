@@ -44,7 +44,7 @@
   .cli button:hover{filter:none;opacity:1}
   .cli button:focus-visible{outline:1px solid #fff;outline-offset:4px}
 </style></head><body>
-<nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener">Contact</a></span></nav>
+<nav><span>Mateo</span><span><a href="#travaux">Travaux</a><a href="#a-propos">À propos</a><a href="#contact">Contact</a></span></nav>
 <section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Mateo</h1><p>Monteur vidéo · <b id="stats"></b></p></div></section>
 <div class="cli" id="cli" aria-label="Filtrer par client"></div>
 <div class="bar"><div id="tabs"></div></div>
@@ -62,6 +62,43 @@
   .about p{font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:#d6d6d6;margin-bottom:18px}
   .about b{color:#fff;font-weight:600}
 </style>
+<section class="contact" id="contact"><h2>Contact</h2>
+<p class="ci">Un projet, une question ? Écris-moi, je réponds vite.</p>
+<form id="cf">
+  <div class="row"><label>Nom<input name="nom" required autocomplete="name"></label><label>E-mail<input name="email" type="email" required autocomplete="email"></label></div>
+  <label>Message<textarea name="message" rows="5" required></textarea></label>
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button type="submit">Envoyer</button><p id="cfm" role="status"></p>
+</form></section>
+<style>
+  .contact{max-width:760px;margin:40px auto 20px;padding:48px 28px 0;border-top:1px solid var(--line);scroll-margin-top:70px}
+  .contact h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:14px}
+  .contact .ci{font-size:clamp(16px,1.6vw,19px);color:#d6d6d6;margin-bottom:24px}
+  .contact form{display:flex;flex-direction:column;gap:16px}
+  .contact .row{display:flex;gap:16px;flex-wrap:wrap}.contact .row label{flex:1;min-width:220px}
+  .contact label{display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .contact input,.contact textarea{background:#0e0e0e;border:1px solid #2a2a2a;color:var(--fg);font:15px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;padding:12px 14px;resize:vertical;text-transform:none;letter-spacing:0}
+  .contact input:focus,.contact textarea:focus{outline:none;border-color:#fff}
+  .contact .hp{display:none}
+  .contact button{align-self:flex-start;background:#fafafa;color:#060606;border:0;font:600 12px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:14px 32px;cursor:pointer}
+  .contact button:disabled{opacity:.5;cursor:default}
+  #cfm{font-size:14px;color:#bbb;min-height:1.4em}
+</style>
+<script>
+cf.addEventListener("submit",async e=>{
+  e.preventDefault(); const b=cf.querySelector("button"), d=Object.fromEntries(new FormData(cf));
+  if(d._honey) return;
+  b.disabled=true; cfm.textContent="Envoi…";
+  try{
+    const r=await fetch("https://formsubmit.co/ajax/pentamapro@gmail.com",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+      body:JSON.stringify({name:d.nom,email:d.email,message:d.message,_replyto:d.email,_subject:"Portfolio : message de "+d.nom,_template:"table",_captcha:"false"})});
+    const j=await r.json();
+    if(!r.ok||String(j.success)!=="true") throw 0;
+    cf.reset(); cfm.textContent="Message envoyé, merci ! Je te réponds vite.";
+  }catch(_){cfm.innerHTML='Envoi impossible pour le moment. Écris-moi sur <a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener" style="color:#fff">Instagram</a>.';}
+  b.disabled=false;
+});
+</script>
 <footer><div class="res"><a href="https://www.instagram.com/pentamaa/" target="_blank" rel="noopener"><img src="https://cdn.simpleicons.org/instagram/fafafa" alt="">@pentamaa</a><a href="#" id="dc" title="Copier le pseudo Discord"><img src="https://cdn.simpleicons.org/discord/fafafa" alt=""><b>pentama</b></a></div><span>© 2026 Mateo</span></footer>
 <script>const dcn=dc.querySelector("b");dc.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama");dcn.textContent="Pseudo copié ✓";setTimeout(()=>dcn.textContent="pentama",1500);});</script>
 <style>
@@ -76,7 +113,7 @@
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
-stats.textContent=V.length+" vidéos · "+F.vues(F.total(V))+" de vues · "+F.clients().length+" clients";
+stats.textContent=V.filter(v=>v.role!=="Cadrage"&&v.type!=="Cadrage").length+" vidéos";
 const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
 const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS;
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
