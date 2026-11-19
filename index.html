@@ -238,7 +238,7 @@ cf.addEventListener("submit",async e=>{
   footer .res img{width:28px;height:28px}
   footer .res b{font-weight:inherit}
 </style>
-<script src="data.js?v=20261119132157"></script><script src="sk.js?v=20261119132157"></script><script src="rv.js?v=20261119132157"></script><script>
+<script src="data.js?v=20261119135759"></script><script src="sk.js?v=20261119135759"></script><script src="rv.js?v=20261119135759"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
@@ -333,4 +333,36 @@ document.addEventListener("click",e=>{
     :`<iframe src="${b.dataset.tk?"https://www.tiktok.com/player/v1/"+b.dataset.tk+"?autoplay=1&description=1&music_info=0":b.dataset.ig+"embed/"}" style="height:min(calc(100vh - 48px),760px);aspect-ratio:9/16;max-width:100%;border:0;border-radius:8px;background:#000" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   d.style.display="flex";
 });
-</script></body></html>
+</script><style>/* Téléphone : menu sur une ligne, bulles clients sur 4 colonnes, onglets qui défilent à l'horizontale, verticaux sur 2 colonnes. */
+  @media(max-width:640px){
+    nav{padding:14px 16px;font-size:10px;letter-spacing:.1em;align-items:center}
+    nav>span{white-space:nowrap;display:flex;align-items:center}
+    nav a{margin-left:14px}
+    nav a[href="#travaux"]{display:none}
+    .hero{height:56.25vw;min-height:0}  /* vidéo du haut en 16/9 sur téléphone */
+    .hero div{left:16px;right:16px;bottom:12px}
+    .hero h1{font-size:30px}
+    .hero p{font-size:10px;margin-top:6px}
+    /* Tous les clients visibles d'un coup : 4 bulles par ligne, plus petites. */
+    .cli{flex-wrap:wrap;justify-content:center;padding:14px 8px 6px;gap:10px 0}
+    .bar div::-webkit-scrollbar{display:none}
+    .cli button{width:25%;flex:none;font-size:9px;gap:4px}
+    .cli img,.cli i{width:46px;height:46px;line-height:42px;font-size:16px}
+    .bar{padding:16px 0 10px}
+    .bar div{flex-wrap:nowrap;overflow-x:auto;gap:22px;padding:0 16px;scrollbar-width:none;width:100%}
+    .bar button{white-space:nowrap;flex:none}
+    .gv{grid-template-columns:repeat(2,1fr)}
+    /* Cartes : image en pleine opacité, titre sur la miniature en bas à gauche (fondu noir dessous pour la lecture), sans la ligne « montage · vues · année ». */
+    .v img,.gv .v img{opacity:1}
+    .v span,.gv .v span{opacity:1;left:0;right:0;bottom:0;padding:34px 14px 12px;background:linear-gradient(#0000,#000b);font-size:11px;text-align:left}
+    .g .v span small{display:none}
+    /* Pas d'effets de survol sur téléphone (ils n'existent pas au doigt ; coupés aussi quand l'aperçu est vu à la souris). */
+    .v:hover img,.gv .v:hover img{transform:none;opacity:1}
+    .cli button:hover{width:25%}
+    .cli button:hover .av{transform:none}
+    .cli button:hover img,.cli button:hover i{box-shadow:0 0 0 1px rgba(255,255,255,.14),0 0 12px rgba(255,255,255,.10)}
+    .cli button:not([aria-pressed=true]):hover .av::before{opacity:0}
+    .cli.on button:not([aria-pressed=true]):hover{filter:grayscale(1);opacity:.4}
+    .pop.go:hover>*{transform:none}
+  }
+</style></body></html>
