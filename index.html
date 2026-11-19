@@ -103,7 +103,7 @@
   nav .nsoc img{width:15px;height:15px;display:block}
 </style>
 <script>dc2.addEventListener("click",e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText("pentama").catch(()=>{});dc2.title="Pseudo Discord copié ✓";setTimeout(()=>dc2.title="Discord : pentama (cliquer pour copier)",1500);});</script>
-<section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Matéo <span class="sep">⎮</span> <span class="pse">Pentama</span></h1><p>Monteur vidéo</p></div></section>
+<section class="hero"><iframe id="reel" allow="autoplay; encrypted-media" title="Showreel"></iframe><div><h1>Matéo <span class="sep">⎮</span> <span class="pse">Pentama</span></h1><p>Monteur vidéo <span style="opacity:.45">·</span> + de 700 vidéos montées</p></div></section>
 <h2 class="cli-t">Ils me font confiance</h2>
 <style>.cli-t{text-align:center;margin:44px 20px 0;font:600 12px Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mut)}</style>
 <div class="cli" id="cli" aria-label="Filtrer par client"></div>
@@ -167,7 +167,7 @@
     items.forEach((it,i)=>{
       const p=document.createElement(it.url?"a":it.cl?"button":"div"); p.className="pop"+(it.cl||it.url?" go":"");
       if(it.url){p.href=it.url;p.target="_blank";p.rel="noopener";}
-      if(it.cl&&!it.url){p.type="button";p.onclick=()=>{cl=it.cl;f="";rc="";n=PAS;draw();clear();document.getElementById("travaux").scrollIntoView({block:"start"});};}
+      if(it.cl&&!it.url){p.type="button";p.onclick=()=>{cl=it.cl;sw="";f="";rc="";n=PAS;draw();clear();document.getElementById("travaux").scrollIntoView({block:"start"});};}
       if(it.cl||it.url) p.title=it.url?"Voir le projet "+it.t:"Voir les vidéos "+(it.cl==="Red Vision"?"Red Vision":it.t);
       p.innerHTML=it.logo!==undefined?`<em>${it.logo?`<img src="${it.logo}" alt="${F.esc(it.t)}">`:`<b>${it.t}</b>`}</em>`:(it.img?`<img src="${it.img}" alt="">`:"")+(it.t&&!it.img?`<span>${F.esc(it.t)}</span>`:"");
       p.style.left=cx+"px"; p.style.top=cy+"px"; box.appendChild(p);
@@ -238,26 +238,30 @@ cf.addEventListener("submit",async e=>{
   footer .res img{width:28px;height:28px}
   footer .res b{font-weight:inherit}
 </style>
-<script src="data.js?v=20261119124228"></script><script src="sk.js?v=20261118105421"></script><script src="rv.js?v=20261119124228"></script><script>
+<script src="data.js?v=20261119130259"></script><script src="sk.js?v=20261119130259"></script><script src="rv.js?v=20261119130259"></script><script>
 // Showreel provisoire : extrait de la vidéo Fort Boyard, en attendant un vrai showreel.
 const R="_H5O4_Nph24";
 reel.src="https://www.youtube-nocookie.com/embed/"+R+"?autoplay=1&mute=1&controls=0&start=600&loop=1&playlist="+R+"&modestbranding=1&playsinline=1&rel=0";
-const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg"};
+const AV={"Skinra": "avatars/skinra.jpg", "Domingo": "avatars/domingo.jpg", "Idreau": "avatars/idreau.jpg", "La Chaine de Rob": "avatars/la-chaine-de-rob.jpg", "Pearja": "avatars/pearja.jpg", "TAHYOU": "avatars/tahyou.jpg", "Dooms": "avatars/dooms.jpg", "Red Vision": "avatars/red-vision.jpg", "Valise & Caramel": "avatars/valise-caramel.jpg", "DJ Matix": "avatars/dj-matix.jpg", "Genopole": "avatars/genopole.jpg", "Noa": "avatars/noa.jpg", "Coloc's": "avatars/coloc-s.jpg", "French Hardware": "avatars/french-hardware.jpg", "Ouah Leouff": "avatars/ouah-leouff.jpg", "Swip Agency": "avatars/swip-agency.jpg"};
 window.AVMAP=AV;
-const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS,rc="";
+const PREMIERE="_H5O4_Nph24", PAS=24; let f="",cl="",tri="date",n=PAS,rc="",sw="";
 const ORDRE=["Concept / IRL","Gaming / Best Of","Vlog / Live","React"];
 // Noa rangé dans « Autres clients » ; Red Vision (vertical) et Noa pas mis en avant dans « Tout ».
 // Les projets de cadrage ne sont pas montrés dans « Tout ».
 const CADRAGE=v=>v.role==="Cadrage"||v.type==="Cadrage";
 // Les vidéos Red Vision (formats sociaux) ne sortent que sur le filtre Red Vision.
 const RVONLY=v=>v.client==="Red Vision";
+// Swip Agency : bulle en plus des créateurs, qui regroupe les vidéos faites via l'agence, avec un onglet par créateur.
+// Ordre des bulles choisi par Matéo (les clients absents de la liste suivent, par nombre de vidéos).
+const ORDRE_CL=["Domingo","Skinra","Red Vision","Dooms","Valise & Caramel","Idreau","Pearja","Swip Agency","La Chaine de Rob","French Hardware","Ouah Leouff"], rang=c=>{const i=ORDRE_CL.indexOf(c);return i<0?99:i;};
+const SWIP="Swip Agency", SWM=["Dooms","Valise & Caramel","French Hardware","Ouah Leouff","Noa"];
 const AUTRES=["Noa","Coloc's","Genopole","DJ Matix","TAHYOU"], HORS_VITRINE=["Red Vision","Noa"], AC="Et bien d'autres";
 const cats=["",...ORDRE.filter(t=>V.some(v=>v.type===t))];
 // Nombre de contenus par client ; Red Vision compte ses formats verticaux (il n'a plus de vidéo YouTube dans la liste).
-const nbC=c=>V.filter(v=>v.client===c).length+(c==="Red Vision"&&window.RVV?RVV.length:0)+(c==="Skinra"&&window.SKV?SKV.length:0);
+const nbC=c=>V.filter(v=>c===SWIP?SWM.includes(v.client):v.client===c).length+(c==="Red Vision"&&window.RVV?RVV.length:0)+(c==="Skinra"&&window.SKV?SKV.length:0);
 // Shorts TikTok : onglet « Shorts » visible seulement sur le filtre Skinra.
 const SH="Shorts", shOk=()=>cl==="Skinra"&&window.SKV&&SKV.length;
-const noms=[...new Set([...F.clients(),...(window.RVV&&RVV.length?["Red Vision"]:[])])].filter(c=>!AUTRES.includes(c)).sort((a,b)=>nbC(b)-nbC(a));
+const noms=[...new Set([...F.clients(),...(window.RVV&&RVV.length?["Red Vision"]:[])])].filter(c=>!AUTRES.includes(c)).concat([SWIP]).sort((a,b)=>rang(a)-rang(b)||nbC(b)-nbC(a));
 // Apparition des cartes au défilement : fondu depuis 0 et montée depuis le bas, colonne par colonne de gauche à droite.
 const IO="IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches?new IntersectionObserver(es=>{
   for(const e of es) if(e.isIntersecting){e.target.classList.add("in");IO.unobserve(e.target);}
@@ -271,7 +275,8 @@ function reveal(){
   });
 }
 function draw(){
-  const L=V.filter(v=>(f?v.type===f:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).sort((a,b)=>b.date.localeCompare(a.date));
+  const L=V.filter(v=>(f?v.type===f:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):cl===SWIP?SWM.includes(v.client)&&(!sw||v.client===sw):v.client===cl))).sort((a,b)=>b.date.localeCompare(a.date));
+  if(cl===SWIP&&!sw) L.sort((a,b)=>(a.client==="Noa")-(b.client==="Noa"));  // Noa après les autres créateurs
   // Fort Boyard (Domingo) toujours en premier dans « Tout ».
   if(!f&&!cl){
     // Vitrine : Fort Boyard, puis la vidéo la plus vue de chaque client, puis le reste par date.
@@ -286,7 +291,10 @@ function draw(){
   if(cl==="Red Vision"){
     const ong=Object.keys(RVC).filter(c=>RVC[c]>1).sort((a,b)=>RVC[b]-RVC[a]), nA=Object.keys(RVC).filter(c=>RVC[c]===1).length;
     tabs.innerHTML=[["",RVV.length],...ong.map(c=>[c,RVC[c]]),...(nA?[[RVA,nA]]:[])].map(([c,k])=>`<button data-rc="${F.esc(c)}" aria-pressed="${c===rc}">${c?F.esc(c):"Tout"} ${k}</button>`).join("");
-  } else tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):v.client===cl))).length}</button>`).join("")+(shOk()?`<button data-c="${SH}" aria-pressed="${f===SH}">${SH} ${SKV.length}</button>`:"");
+  } else if(cl===SWIP){
+    const k=c=>V.filter(v=>v.client===c&&!CADRAGE(v)).length, mem=SWM.filter(c=>k(c)).sort((a,b)=>(a==="Noa")-(b==="Noa")||k(b)-k(a));  // Noa en dernier
+    tabs.innerHTML=[["",V.filter(v=>SWM.includes(v.client)&&!CADRAGE(v)).length],...mem.map(c=>[c,k(c)])].map(([c,n])=>`<button data-sw="${F.esc(c)}" aria-pressed="${c===sw}">${c?F.esc(c):"Tout"} ${n}</button>`).join("");
+  } else tabs.innerHTML=cats.map(c=>`<button data-c="${F.esc(c)}" aria-pressed="${c===f}">${c?F.esc(c):"Tout"} ${V.filter(v=>(c?v.type===c:!CADRAGE(v))&&(cl==="Red Vision"||!RVONLY(v))&&(!cl||(cl===AC?AUTRES.includes(v.client):cl===SWIP?SWM.includes(v.client)&&(!sw||v.client===sw):v.client===cl))).length}</button>`).join("")+(shOk()?`<button data-c="${SH}" aria-pressed="${f===SH}">${SH} ${SKV.length}</button>`:"");
   cli.className="cli"+(cl?" on":"");
   // Les ronds sont construits une seule fois ; ensuite on ne change que l'état choisi (pas de « saut » au clic).
   if(!cli.children.length) cli.innerHTML=noms.map(c=>`<button data-cl="${F.esc(c)}" aria-pressed="${c===cl}" title="${F.esc(c)} · ${nbC(c)} vidéos"><span class="av">${AV[c]?`<img src="${AV[c]}" alt="" loading="lazy">`:`<i>${F.esc(c[0])}</i>`}</span>${F.esc(c)}</button>`).join("")+`<button data-cl="${AC}" aria-pressed="${cl===AC}" title="${AC}"><span class="av"><i>+</i></span>${AC}</button>`;
@@ -304,8 +312,8 @@ function draw(){
   reveal();
   more.style.display=L.length>n?"block":"none"; more.textContent="Voir plus ("+(L.length-n)+" restantes)";
 }
-tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return; if(b.dataset.rc!==undefined) rc=b.dataset.rc; else f=b.dataset.c; n=PAS;draw();});
-cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";if(cl==="Red Vision"||(f===SH&&cl!=="Skinra"))f="";draw();}});
+tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return; if(b.dataset.rc!==undefined) rc=b.dataset.rc; else if(b.dataset.sw!==undefined) sw=b.dataset.sw; else f=b.dataset.c; n=PAS;draw();});
+cli.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cl=cl===b.dataset.cl?"":b.dataset.cl;n=PAS;rc="";sw="";if(cl==="Red Vision"||cl===SWIP||(f===SH&&cl!=="Skinra"))f="";draw();}});
 more.addEventListener("click",()=>{n+=PAS;draw();});
 draw(); F.lecteur();
 // Toujours ouvrir en haut du site : pas de retour à l'ancienne position au rechargement, ni de saut vers #a-propos / #contact.
