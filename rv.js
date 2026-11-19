@@ -313,5 +313,7 @@ window.RVV=[{"c": "Le Stamm – QoQa","t": "Meurtre & Mystère","p": "rv/Le-Stam
 {"c": "Helena Wolff", "t": "Charmant appartement à Megève, conçu pour vous offrir des…", "p": "rv/ig-DDy2LjWP-NL.jpg", "ig": "https://www.instagram.com/reel/DDy2LjWP-NL/"},
 {"c": "Helena Wolff", "t": "Splendide chalet à Megève, niché dans un cadre verdoyant,…", "p": "rv/ig-DCoK1aTAzDZ.jpg", "ig": "https://www.instagram.com/reel/DCoK1aTAzDZ/"},
 {"c": "Creatures", "t": "Memories of our last event on the Rooftop with our dear…", "p": "rv/ig-DCUWWrDuD_l.jpg", "ig": "https://www.instagram.com/reel/DCUWWrDuD_l/"},
-{"c": "Creatures", "t": "Reminiscing our event at Les Arches a few weeks ago 💛", "p": "rv/ig-DBwk7MPuWVs.jpg", "ig": "https://www.instagram.com/reel/DBwk7MPuWVs/"}
+{"c": "Creatures", "t": "Reminiscing our event at Les Arches a few weeks ago 💛", "p": "rv/ig-DBwk7MPuWVs.jpg", "ig": "https://www.instagram.com/reel/DBwk7MPuWVs/"},
+{"c": "Geneva Boat", "t": "Reel Instagram", "p": "rv/ig-Df5Go7kG1wT.jpg", "ig": "https://www.instagram.com/reel/Df5Go7kG1wT/"},
+{"c": "associationorigyne.ch", "t": "Reel Instagram", "p": "rv/ig-Df2ZzsoItVS.jpg", "ig": "https://www.instagram.com/reel/Df2ZzsoItVS/"}
 ];
